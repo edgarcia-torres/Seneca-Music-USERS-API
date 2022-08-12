@@ -5,8 +5,9 @@
  * (including web sites) or distributed to other students. * 
  * 
  * Name: Edgar David Garcia Torres  Student ID: 104433206  Date: 05/08/2022
- * 
- * *******************************************************************************************/
+*
+* User API (Heroku) Link: https://arcane-fjord-43322.herokuapp.com/ 
+* *******************************************************************************************/
 
 const express = require('express');
 const cors = require("cors");
@@ -15,31 +16,27 @@ const jwt = require('jsonwebtoken');
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
 const dotenv = require("dotenv");
-
-const app = express();
 dotenv.config();
-
+const app = express();
 const HTTP_PORT = process.env.PORT || 8080;
-
 app.use(express.json());
 app.use(cors());
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 // JSON Web Token Setup
 var ExtractJwt = passportJWT.ExtractJwt;
 var JwtStrategy = passportJWT.Strategy;
 // Configure its options
 var jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
-///jwtOptions.secretOrKey = dotenv.JWT_SECRET;
-jwtOptions.secretOrKey = "D5x04&KuMmYbk#bi0izlOHNNE@$nzK";
+jwtOptions.secretOrKey = process.env.JWT_SECRET;
 
 var strategy = new JwtStrategy(jwtOptions, function (jwt_payload, next) {
     console.log('payload received', jwt_payload);
 
     if (jwt_payload) {
         // The following will ensure that all routes using 
-        // passport.authenticate have a req.user._id, req.user.userName, req.user.fullName & req.user.role values 
+        // passport.authenticate have a req.user._id, req.us er.userName, req.user.fullName & req.user.role values 
         // that matches the request payload data
         next(null, { _id: jwt_payload._id, 
             userName: jwt_payload.userName, 
@@ -54,8 +51,6 @@ passport.use(strategy);
 
 // add passport as application-level middleware
 app.use(passport.initialize());
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 /* TODO Add Your Routes Here */
 
@@ -106,29 +101,22 @@ app.get("/api/user/favourites", passport.authenticate('jwt', { session: false })
   });
   })
 
+//DELETE removing a specific favourite  by id
+app.delete("/api/user/favourites/:id",passport.authenticate('jwt', { session: false }), (req,res)=>{ //(protected using the passport.authenticate() middleware
+  userService.removeFavourite(req.user._id,req.params.id).then((data)=>{
+    res.status(200).json(data);
+  }).catch(err=>{
+      console.log("Attempt to delete failed ");
+      res.status(422).json(err);
+  });
+})
+
 //ADD SPECIFIC FAVORITE 
 app.put("/api/user/favourites/:id",(req,res)=>{
-    console.log("Attempt to update ");
-    console.log(req.body);
-    console.log("User._id: ",req.body.params.user._id);
     userService.addFavourite(req.body.params.user._id, req.body.params.id).then(data=>{ //id route parameter as the second parameter.
-    }).then((data)=>{
-      res.status(200).json(data);
+    }).then((data)=>{ res.status(200).json(data);
     }).catch(err=>{
         console.log("Attempt to update failed ");
-        res.status(422).json(err);
-    });
-  })
-
-//DELETE removing a specific favourite  by id
-app.delete("/api/user/favourites/:id",passport.authenticate('jwt', { session: false }), (req,res)=>{ //(protected using the passport.authenticate() middleware)
-    console.log("Attempt to delete ");
-    console.log("DELETE BODY IS : "+ req.body)
-    userService.removeFavourite(req.user._id,req.params.id)
-    .then((data)=>{
-      res.status(200).json(data);
-    }).catch(err=>{
-        console.log("Attempt to delete failed ");
         res.status(422).json(err);
     });
   })

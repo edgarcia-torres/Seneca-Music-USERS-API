@@ -8,13 +8,12 @@
  * 
  * *******************************************************************************************/
 
-
+require('dotenv').config()
 const mongoose = require('mongoose');
 mongoose.set('useFindAndModify', false); //https://mongoosejs.com/docs/deprecations.html#findandmodify
 const bcrypt = require('bcryptjs');
 
-//let mongoDBConnectionString = process.env.MONGO_URL;
-let mongoDBConnectionString = "mongodb+srv://dbAdmin:dbAdminPass@cluster0.z8lak.mongodb.net/loginDataBase?retryWrites=true&w=majority"
+let mongoDBConnectionString = process.env.MONGO_URL;
 
 let Schema = mongoose.Schema;
 
@@ -124,10 +123,7 @@ module.exports.addFavourite = function (id, favId) {
             }
 
         })
-
     });
-
-
 }
 
 module.exports.removeFavourite = function (id, favId) {
