@@ -1,0 +1,2 @@
+MONGO_URL = mongodb+srv://dbAdmin:dbAdminPass@cluster0.z8lak.mongodb.net/loginDataBase?retryWrites=true&w=majority
+JWT_SECRET = D5x04&KuMmYbk#bi0izlOHNNE@$nzK

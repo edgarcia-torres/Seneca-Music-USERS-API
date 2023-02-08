@@ -6,7 +6,9 @@
  * 
  * Name: Edgar David Garcia Torres  Student ID: 104433206  Date: 05/08/2022
 *
-* User API (Heroku) Link: https://arcane-fjord-43322.herokuapp.com/ 
+* Angular App (Deployed) Link: https://imaginative-panda-ac45aa.netlify.app
+*
+* User API (Heroku) Link: 
 * *******************************************************************************************/
 
 const express = require('express');

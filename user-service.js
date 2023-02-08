@@ -5,8 +5,11 @@
  * (including web sites) or distributed to other students. * 
  * 
  * Name: Edgar David Garcia Torres  Student ID: 104433206  Date: 05/08/2022
- * 
- * *******************************************************************************************/
+*
+* Angular App (Deployed) Link: https://imaginative-panda-ac45aa.netlify.app
+*
+* User API (Heroku) Link: 
+* *******************************************************************************************/
 
 require('dotenv').config()
 const mongoose = require('mongoose');
